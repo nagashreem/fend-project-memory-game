@@ -10,52 +10,88 @@
  *   - add each card's HTML to the page
  */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
 
 
 $(document).ready(function(){
 
+	var deck = document.getElementsByClassName("deck");
+	let classArray = document.querySelectorAll(".deck li");
+	const idArray = [];
+	var html = " ";
 	var cardId;
 	var openCardList = [];
 	var matchedCardList = [];
 	var moves = 0;
+	
 
-	$('.card').click(function(event){
-		cardId = String(event.target.id);
-		console.log (cardId);
-		openCard();
-		moves++;
-		updateMoves();
-		checkForMatch();
+	
+	for(i=0;i<classArray.length;i++){	/*Store the ids of all the cards in the deck in idArray */
+		idArray[i]=classArray[i].getAttribute("id"); 
+	}	
+
+	shuffledDeck(idArray);	/*Start with a shuffled deck*/
+
+	cardClick();	/*Handle the click event on a card*/
+
+	$('.restart').click(function(){	/*Reshuffle the deck when restart is clicked*/
+		shuffledDeck(idArray);
+		cardClick();
 	});
 
-	//Open the card clicked
+/*..................Function definitions..............................*/
+
+	/*Shuffle function from http://stackoverflow.com/a/2450976*/
+	function shuffle(array) {
+	    var currentIndex = array.length, temporaryValue, randomIndex;
+
+	    while (currentIndex !== 0) {
+	        randomIndex = Math.floor(Math.random() * currentIndex);
+	        currentIndex -= 1;
+	        temporaryValue = array[currentIndex];
+	        array[currentIndex] = array[randomIndex];
+	        array[randomIndex] = temporaryValue;
+	    }
+	    return array;
+	}
+
+	/*Shuffle the cards in the deck*/
+	function shuffledDeck(cards){
+		var shuffledList= shuffle(cards);
+		var html=" ";
+		for(i=0;i<shuffledList.length;i++){	
+			html += "<li class=\"card\" id=\""+shuffledList[i]+"\">\n"+document.getElementById(shuffledList[i]).innerHTML+ "\n</li>\n";
+		}
+		$(deck).empty();
+		$(deck).append(html);
+	}
+
+	/*Handle the  card click*/
+	function cardClick(){
+		$('.card').click(function(event){
+			cardId = String(event.target.id);
+			console.log (cardId);
+			openCard();
+			moves++;
+			updateMoves();
+			checkForMatch();
+		});
+	}
+
+	/*Open the card clicked*/
 	function openCard(){
 		console.log("inside openCard");
 		document.getElementById(cardId).classList.add("show", "open");
 	};
 
-	//Close the unmatched card
+	/*Close the unmatched card*/
 	function closeCard(element){
 		console.log("inside closeCard");
 		setTimeout(function(){
 			document.getElementById(element).classList.remove("show", "open");}, 500);
 	}
 
-	//Check if the cards match
+	/*Check if the cards match*/
 	function checkForMatch(){
 		openCardList.push(cardId);
 		if(!(openCardList.length<2)){
@@ -81,7 +117,7 @@ $(document).ready(function(){
 		}
 	};
 
-	//Update the number of moves
+	/*Check if the cards match*/
 	function updateMoves(){
 		document.querySelector("span.moves").textContent = String(moves);
 	};
