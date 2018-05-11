@@ -37,6 +37,8 @@ $(document).ready(function(){
 	$('.restart').click(function(){	/*Reshuffle the deck when restart is clicked*/
 		shuffledDeck(idArray);
 		cardClick();
+		moves=0;
+		updateMoves();
 	});
 
 /*..................Function definitions..............................*/
@@ -70,23 +72,18 @@ $(document).ready(function(){
 	function cardClick(){
 		$('.card').click(function(event){
 			cardId = String(event.target.id);
-			console.log (cardId);
 			openCard();
-			moves++;
-			updateMoves();
 			checkForMatch();
 		});
 	}
 
 	/*Open the card clicked*/
 	function openCard(){
-		console.log("inside openCard");
 		document.getElementById(cardId).classList.add("show", "open");
 	};
 
 	/*Close the unmatched card*/
 	function closeCard(element){
-		console.log("inside closeCard");
 		setTimeout(function(){
 			document.getElementById(element).classList.remove("show", "open");}, 500);
 	}
@@ -95,15 +92,13 @@ $(document).ready(function(){
 	function checkForMatch(){
 		openCardList.push(cardId);
 		if(!(openCardList.length<2)){
-			console.log(openCardList);
 			var card1 = String(openCardList[0]).slice(0,String(openCardList[0]).search("-"));
-			console.log(card1);
 			var card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-"));
-			console.log(card2);
+			moves++;
+			updateMoves();
 			if(card1==card2){
 				matchedCardList.push(openCardList[0]);
 				matchedCardList.push(openCardList[1]);
-				console.log(matchedCardList);
 				if(matchedCardList.length==16){
 					console.log("you win");
 				}
@@ -113,7 +108,6 @@ $(document).ready(function(){
 				closeCard(String(openCardList[1]));
 			}
 		openCardList.splice(0,2);
-		console.log(openCardList);
 		}
 	};
 
