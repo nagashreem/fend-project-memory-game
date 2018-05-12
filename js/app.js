@@ -25,23 +25,17 @@ $(document).ready(function(){
 	var matchedCardList = [];
 	var moves = 0;
 	
-
-	
 	for(i=0;i<classArray.length;i++){	/*Store the ids of all the cards in the deck in idArray */
 		idArray[i]=classArray[i].getAttribute("id"); 
 	}	
 
-	shuffledDeck(idArray);	/*Start with a shuffled deck*/
-
-	cardClick();	/*Handle the click event on a card*/
+	refreshDeck(); /*Start with a shuffled deck and fresh Score Panel*/
 
 	$('.restart').click(function(){	/*Reshuffle the deck when restart is clicked*/
-		shuffledDeck(idArray);
-		cardClick();
-		moves=0;
-		updateMoves();
-		resetScore();
+		refreshDeck();
 	});
+
+
 
 /*..................Function definitions..............................*/
 
@@ -140,6 +134,15 @@ $(document).ready(function(){
 		for(i=0;i<starScore.length;i++){
 			document.getElementById(starScore[i].getAttribute("id")).classList.remove("highlight");
 		}
+	}
+
+	/*Refresh deck and Score Panel*/
+	function refreshDeck(){
+		shuffledDeck(idArray);
+		cardClick();
+		moves=0;
+		updateMoves();
+		resetScore();
 	}
 
 });
