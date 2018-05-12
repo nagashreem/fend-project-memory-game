@@ -17,6 +17,7 @@ $(document).ready(function(){
 
 	var deck = document.getElementsByClassName("deck");
 	let classArray = document.querySelectorAll(".deck li");
+	let starScore = document.querySelectorAll(".fa-star");
 	const idArray = [];
 	var html = " ";
 	var cardId;
@@ -39,6 +40,7 @@ $(document).ready(function(){
 		cardClick();
 		moves=0;
 		updateMoves();
+		resetScore();
 	});
 
 /*..................Function definitions..............................*/
@@ -100,6 +102,7 @@ $(document).ready(function(){
 				matchedCardList.push(openCardList[0]);
 				matchedCardList.push(openCardList[1]);
 				if(matchedCardList.length==16){
+					updateScore();
 					console.log("you win");
 				}
 			}
@@ -115,6 +118,29 @@ $(document).ready(function(){
 	function updateMoves(){
 		document.querySelector("span.moves").textContent = String(moves);
 	};
+
+	/*Highlight the stars based on Score*/
+	function updateScore(){
+		if (moves<=10){
+			score = 3;
+		}
+		else if (moves<=20){
+			score = 2;
+		}
+		else{
+			score = 1;
+		}
+		for(i=0;i<score;i++){
+			document.getElementById(starScore[i].getAttribute("id")).classList.add("highlight");
+		}
+	}
+
+	/*Reset the score*/
+	function resetScore(){
+		for(i=0;i<starScore.length;i++){
+			document.getElementById(starScore[i].getAttribute("id")).classList.remove("highlight");
+		}
+	}
 
 });
 
