@@ -1,18 +1,3 @@
-/*
- * Create a list that holds all of your cards
- */
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-
-
-
 $(document).ready(function(){
 
 	var deck = document.getElementsByClassName("deck");
@@ -86,25 +71,33 @@ $(document).ready(function(){
 
 	/*Check if the cards match*/
 	function checkForMatch(){
-		openCardList.push(cardId);
-		if(!(openCardList.length<2)){
-			var card1 = String(openCardList[0]).slice(0,String(openCardList[0]).search("-"));
-			var card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-"));
-			moves++;
-			updateMoves();
-			if(card1==card2){
-				matchedCardList.push(openCardList[0]);
-				matchedCardList.push(openCardList[1]);
-				if(matchedCardList.length==16){
-					updateScore();
-					console.log("you win");
+		
+		if(openCardList.indexOf(cardId)==-1){ /*Proceed only if two different cards are clicked*/
+			openCardList.push(cardId); /*Add cards to the openCardist*/
+		
+			if(!(openCardList.length<2)){ /*Proceed only if there are atleast 2 cards to check for match*/
+				var card1 = String(openCardList[0]).slice(0,String(openCardList[0]).search("-")); /*Store details of first card in card1*/
+				var card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-")); /*Store details of second card in card2*/
+				moves++; /*Increment the moves*/
+				updateMoves();
+		
+				if(card1==card2){ /*Chheck if the cards match and if they match, add them to a another list*/
+					matchedCardList.push(openCardList[0]);
+					matchedCardList.push(openCardList[1]);
+		
+					if(matchedCardList.length==16){ /*Check if all cards are matched*/
+						updateScore();
+						console.log("you win");
+					}
+		
 				}
+				else{ /*Close cards if they dont match*/
+					closeCard(String(openCardList[0]));
+					closeCard(String(openCardList[1]));
+				}
+		
+			openCardList.splice(0,2); /*Remove the unmatched cards from the openCardList*/
 			}
-			else{
-				closeCard(String(openCardList[0]));
-				closeCard(String(openCardList[1]));
-			}
-		openCardList.splice(0,2);
 		}
 	};
 
