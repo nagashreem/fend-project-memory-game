@@ -48,7 +48,7 @@ h1 {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin: 0 0 3em;
+    margin: 0 0 2em;
 }
 
 .deck .card {
@@ -91,7 +91,7 @@ h1 {
     margin-bottom: 10px;
 }
 
-.score-panel .stars {
+.score-panel .stars{
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -110,4 +110,16 @@ h1 {
 
 .highlight {
     color: #DAA520;
+}
+
+.timer{
+    text-align: center;
+    width: 100px;
+    margin: auto;
+    padding:0;
+    line-height: 0;
+}
+
+.timeDisplay{
+    font-weight:bold;
 }

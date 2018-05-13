@@ -1,14 +1,17 @@
 $(document).ready(function(){
 
-	var deck = document.getElementsByClassName("deck");
-	let classArray = document.querySelectorAll(".deck li");
-	let starScore = document.querySelectorAll(".fa-star");
-	const idArray = [];
-	var html = " ";
-	var cardId;
-	var openCardList = [];
-	var matchedCardList = [];
-	var moves = 0;
+	var deck= document.getElementsByClassName("deck");
+	let classArray= document.querySelectorAll(".deck li");
+	let starScore= document.querySelectorAll(".fa-star");
+	const idArray= [];
+	var html= " ";
+	var cardId, myVar;
+	var openCardList= [];
+	var matchedCardList= [];
+	var moves= 0, hour= 0,minute= 0,second= 0;
+	let hr= document.querySelector(".hr");
+	let min= document.querySelector(".min");
+	let sec = document.querySelector(".sec");
 	
 	for(i=0;i<classArray.length;i++){	/*Store the ids of all the cards in the deck in idArray */
 		idArray[i]=classArray[i].getAttribute("id"); 
@@ -47,6 +50,7 @@ $(document).ready(function(){
 		}
 		$(deck).empty();
 		$(deck).append(html);
+		clearInterval(myVar);/*Clear the timer*/
 	}
 
 	/*Handle the  card click*/
@@ -80,14 +84,16 @@ $(document).ready(function(){
 				var card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-")); /*Store details of second card in card2*/
 				moves++; /*Increment the moves*/
 				updateMoves();
+				updateScore();
 		
-				if(card1==card2){ /*Chheck if the cards match and if they match, add them to a another list*/
+				if(card1==card2){ /*Check if the cards match and if they match, add them to a another list*/
 					matchedCardList.push(openCardList[0]);
 					matchedCardList.push(openCardList[1]);
 		
 					if(matchedCardList.length==16){ /*Check if all cards are matched*/
 						updateScore();
 						console.log("you win");
+						clearInterval(myVar);/*Stop the timer when all cards are matched*/
 					}
 		
 				}
@@ -109,23 +115,23 @@ $(document).ready(function(){
 	/*Highlight the stars based on Score*/
 	function updateScore(){
 		if (moves<=10){
-			score = 3;
+			score = -1;
 		}
 		else if (moves<=20){
-			score = 2;
-		}
-		else{
 			score = 1;
 		}
+		else{
+			score = 2;
+		}
 		for(i=0;i<score;i++){
-			document.getElementById(starScore[i].getAttribute("id")).classList.add("highlight");
+			document.getElementById(starScore[i].getAttribute("id")).classList.remove("highlight");
 		}
 	}
 
 	/*Reset the score*/
 	function resetScore(){
 		for(i=0;i<starScore.length;i++){
-			document.getElementById(starScore[i].getAttribute("id")).classList.remove("highlight");
+			document.getElementById(starScore[i].getAttribute("id")).classList.add("highlight");
 		}
 	}
 
@@ -134,9 +140,34 @@ $(document).ready(function(){
 		shuffledDeck(idArray);
 		cardClick();
 		moves=0;
+		hour=0;
+		second=0;
+		minute=0;
 		updateMoves();
 		resetScore();
+		myVar = setInterval(myTimer,1000);/*Start the timer*/
 	}
+
+	/*Compute and Display the time elapsed*/
+	function myTimer(){
+		if(second<59){
+			second++;
+		}
+		else{
+			second = 0;
+			if(minute<59){
+				minute++;
+			}
+			else{
+				minute=0;
+				hour++;
+			}
+		}
+
+		sec.textContent = ((second<10)?"0"+second:second);
+		min.textContent = ((minute<10)?"0"+minute:minute);
+		hr.textContent = ((hour<10)?"0"+hour:hour);
+	};
 
 });
 
