@@ -112,6 +112,10 @@ h1 {
     color: #DAA520;
 }
 
+/*
+ * Styles for the Timer
+ */
+
 .timer{
     text-align: center;
     width: 100px;
@@ -122,4 +126,34 @@ h1 {
 
 .timeDisplay{
     font-weight:bold;
+}
+
+/*
+ * Styles for the Message on completion
+ */
+
+.win{
+    
+    margin:auto;
+    padding:auto;
+    text-align: center;
+    align-content: center;
+    font-family:"Lobster";
+}
+
+.msg{
+    font-size: 2em;
+}
+
+.playAgain{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    border-radius: 12px;
+    font-family:"Lobster";
 }
