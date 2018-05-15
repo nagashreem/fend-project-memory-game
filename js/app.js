@@ -1,17 +1,20 @@
 $(document).ready(function(){
 
-	var deck= document.getElementsByClassName("deck");
-	let classArray= document.querySelectorAll(".deck li");
+	const deck= document.getElementsByClassName("deck");
+	const deckId = document.getElementById("display");
+	const htmlTemp = document.getElementById("display").innerHTML;
+	const classArray= document.querySelectorAll(".deck li");
 	let starScore= document.querySelectorAll(".fa-star");
-	const idArray= [];
-	var html= " ";
-	var cardId, myVar;
-	var openCardList= [];
-	var matchedCardList= [];
-	var moves= 0, hour= 0,minute= 0,second= 0;
+	const idArray =[];
+	let html= " ";
+	let cardId, myVar;
+	let openCardList= [];
+	let matchedCardList= [];
+	let moves= 0, hour= 0,minute= 0,second= 0, score =3;
 	let hr= document.querySelector(".hr");
 	let min= document.querySelector(".min");
 	let sec = document.querySelector(".sec");
+	
 	
 	for(i=0;i<classArray.length;i++){	/*Store the ids of all the cards in the deck in idArray */
 		idArray[i]=classArray[i].getAttribute("id"); 
@@ -24,12 +27,11 @@ $(document).ready(function(){
 	});
 
 
-
 /*..................Function definitions..............................*/
 
 	/*Shuffle function from http://stackoverflow.com/a/2450976*/
 	function shuffle(array) {
-	    var currentIndex = array.length, temporaryValue, randomIndex;
+	    let currentIndex = array.length, temporaryValue, randomIndex;
 
 	    while (currentIndex !== 0) {
 	        randomIndex = Math.floor(Math.random() * currentIndex);
@@ -43,11 +45,12 @@ $(document).ready(function(){
 
 	/*Shuffle the cards in the deck*/
 	function shuffledDeck(cards){
-		var shuffledList= shuffle(cards);
-		var html=" ";
+		let shuffledList= shuffle(cards);
+		let html="";
 		for(i=0;i<shuffledList.length;i++){	
-			html += "<li class=\"card\" id=\""+shuffledList[i]+"\">\n"+document.getElementById(shuffledList[i]).innerHTML+ "\n</li>\n";
+			html += `<li class="card" id="${shuffledList[i]}">${document.getElementById(shuffledList[i]).innerHTML}</li>`;
 		}
+		console.log(html);
 		$(deck).empty();
 		$(deck).append(html);
 		clearInterval(myVar);/*Clear the timer*/
@@ -80,8 +83,8 @@ $(document).ready(function(){
 			openCardList.push(cardId); /*Add cards to the openCardist*/
 		
 			if(!(openCardList.length<2)){ /*Proceed only if there are atleast 2 cards to check for match*/
-				var card1 = String(openCardList[0]).slice(0,String(openCardList[0]).search("-")); /*Store details of first card in card1*/
-				var card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-")); /*Store details of second card in card2*/
+				let card1 = String(openCardList[0]).slice(0,String(openCardList[0]).search("-")); /*Store details of first card in card1*/
+				let card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-")); /*Store details of second card in card2*/
 				moves++; /*Increment the moves*/
 				updateMoves();
 				updateScore();
@@ -89,10 +92,14 @@ $(document).ready(function(){
 				if(card1==card2){ /*Check if the cards match and if they match, add them to a another list*/
 					matchedCardList.push(openCardList[0]);
 					matchedCardList.push(openCardList[1]);
+					openCardList.forEach(function(openCardList){
+						document.getElementById(openCardList).classList.add("match");
+					});					
 		
 					if(matchedCardList.length==16){ /*Check if all cards are matched*/
+						
 						updateScore();
-						console.log("you win");
+						displayMsg();
 						clearInterval(myVar);/*Stop the timer when all cards are matched*/
 					}
 		
@@ -115,16 +122,16 @@ $(document).ready(function(){
 	/*Highlight the stars based on Score*/
 	function updateScore(){
 		if (moves<=10){
-			score = -1;
+			score = 3;
 		}
 		else if (moves<=20){
-			score = 1;
-		}
-		else{
 			score = 2;
 		}
-		for(i=0;i<score;i++){
-			document.getElementById(starScore[i].getAttribute("id")).classList.remove("highlight");
+		else{
+			score = 1;
+		}
+		for(i=score;i<3;i++){
+			document.getElementById(starScore[2-i].getAttribute("id")).classList.remove("highlight");
 		}
 	}
 
@@ -137,12 +144,14 @@ $(document).ready(function(){
 
 	/*Refresh deck and Score Panel*/
 	function refreshDeck(){
+		document.getElementById("display").innerHTML=htmlTemp;
 		shuffledDeck(idArray);
 		cardClick();
 		moves=0;
 		hour=0;
 		second=0;
 		minute=0;
+		matchedCardList=[];
 		updateMoves();
 		resetScore();
 		myVar = setInterval(myTimer,1000);/*Start the timer*/
@@ -168,6 +177,23 @@ $(document).ready(function(){
 		min.textContent = ((minute<10)?"0"+minute:minute);
 		hr.textContent = ((hour<10)?"0"+hour:hour);
 	};
+
+	/*Display Message on Completion*/
+	function displayMsg(){
+		$(deck).empty();
+		
+		document.getElementById("display").innerHTML = 
+		`<div class="win">
+			<p class="msg">Congratulations! You Won!</p>
+			<p>With ${moves} moves and ${score} stars<p>
+			<p>Total time taken: ${hour} hr ${minute} mins ${second} sec</p>
+			<button class="playAgain" type="button" class="btn btn btn-primary">Play again</button>
+		</div>`
+
+		$('.playAgain').click(function(){	/*Reshuffle the deck when the player wants to play again*/
+			refreshDeck();
+		});
+	}
 
 });
 
