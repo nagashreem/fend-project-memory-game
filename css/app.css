@@ -51,6 +51,11 @@ h1 {
     margin: 0 0 2em;
 }
 
+.deck.final{
+    background-image: url('../img/confetti.jpg');/*Photo by Jason Leung on Unsplash*/
+    background-size: 660px 680px;
+    }
+
 .deck .card {
     height: 125px;
     width: 125px;
@@ -146,7 +151,7 @@ h1 {
 }
 
 .playAgain{
-    background-color: #4CAF50; /* Green */
+    background-color: gray;
     border: none;
     color: black;
     padding: 15px 32px;

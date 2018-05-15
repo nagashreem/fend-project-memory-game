@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 	const deck= document.getElementsByClassName("deck");
 	const deckId = document.getElementById("display");
-	const htmlTemp = document.getElementById("display").innerHTML;
+	const htmlTemp = deckId.innerHTML;
 	const classArray= document.querySelectorAll(".deck li");
 	let starScore= document.querySelectorAll(".fa-star");
 	const idArray =[];
@@ -50,7 +50,6 @@ $(document).ready(function(){
 		for(i=0;i<shuffledList.length;i++){	
 			html += `<li class="card" id="${shuffledList[i]}">${document.getElementById(shuffledList[i]).innerHTML}</li>`;
 		}
-		console.log(html);
 		$(deck).empty();
 		$(deck).append(html);
 		clearInterval(myVar);/*Clear the timer*/
@@ -144,7 +143,8 @@ $(document).ready(function(){
 
 	/*Refresh deck and Score Panel*/
 	function refreshDeck(){
-		document.getElementById("display").innerHTML=htmlTemp;
+		deckId.innerHTML=htmlTemp;
+		deckId.classList.remove("final");
 		shuffledDeck(idArray);
 		cardClick();
 		moves=0;
@@ -181,8 +181,9 @@ $(document).ready(function(){
 	/*Display Message on Completion*/
 	function displayMsg(){
 		$(deck).empty();
+		deckId.classList.add("final");
 		
-		document.getElementById("display").innerHTML = 
+		deckId.innerHTML = 
 		`<div class="win">
 			<p class="msg">Congratulations! You Won!</p>
 			<p>With ${moves} moves and ${score} stars<p>
