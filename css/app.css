@@ -96,7 +96,7 @@ h1 {
     margin-bottom: 10px;
 }
 
-.score-panel .stars{
+.score-panel .stars {
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -160,5 +160,5 @@ h1 {
     display: inline-block;
     font-size: 20px;
     border-radius: 12px;
-    font-family: 'Lobster', cursive;;
+    font-family: 'Lobster', cursive;
 }
