@@ -51,10 +51,10 @@ h1 {
     margin: 0 0 2em;
 }
 
-.deck.final{
+.deck.final {
     background-image: url('../img/confetti.png');/*Photo by Jason Leung on Unsplash*/
     background-size: 660px 680px;
-    }
+}
 
 .deck .card {
     height: 125px;
@@ -121,15 +121,15 @@ h1 {
  * Styles for the Timer
  */
 
-.timer{
+.timer {
     text-align: center;
     width: 100px;
     margin: auto;
-    padding:0;
+    padding: 0;
     line-height: 0;
 }
 
-.timeDisplay{
+.timeDisplay {
     font-weight:bold;
 }
 
@@ -137,7 +137,7 @@ h1 {
  * Styles for the Message on completion
  */
 
-.win{
+.win {
     font-size: 1.5em;
     margin: auto;
     text-align: center;
@@ -145,11 +145,11 @@ h1 {
     font-family: 'Lobster', cursive;;
 }
 
-.msg{
+.msg {
     font-size: 2em;
 }
 
-.playAgain{
+.playAgain {
     background-color: #3cb371;
     border: 1px solid #696969;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -160,5 +160,5 @@ h1 {
     display: inline-block;
     font-size: 20px;
     border-radius: 12px;
-    font-family:'Lobster', cursive;;
+    font-family: 'Lobster', cursive;;
 }
