@@ -2,11 +2,11 @@
 
 ## Table of Contents
 
-* [How the Game Works](#How_the_Game_Works)
+* [Instructions](#instructions)
 * [Contributing](#contributing)
-* [License](#License)
+* [License](#license)
 
-## How The Game Works
+## Instructions
 
 The game board consists of sixteen "cards" arranged in a grid. The deck is made up of eight different pairs of cards, each with different symbols on one side. The cards are arranged randomly on the grid with the symbol face down. The gameplay rules are very simple: flip over two hidden cards at a time to locate the ones that match!
 Match all the cards in as few moves as you can and in as little time as you can!
