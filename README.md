@@ -2,9 +2,9 @@
 
 ## Table of Contents
 
-* [How The Game Works](#How The Game Works)
+* [How the Game Works](#How_the_Game_Works)
 * [Contributing](#contributing)
-* [License] (#License)
+* [License](#License)
 
 ## How The Game Works
 
