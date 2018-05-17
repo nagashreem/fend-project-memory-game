@@ -1,23 +1,24 @@
 $(document).ready(function(){
 
-	const deck= document.getElementsByClassName("deck");
-	const deckId = document.getElementById("display");
-	const htmlTemp = deckId.innerHTML;
-	const classArray= document.querySelectorAll(".deck li");
-	let starScore= document.querySelectorAll(".fa-star");
-	const idArray =[];
-	let html= " ";
-	let cardId, myVar;
-	let openCardList= [];
-	let matchedCardList= [];
-	let moves= 0, hour= 0,minute= 0,second= 0, score =3;
-	let hr= document.querySelector(".hr");
-	let min= document.querySelector(".min");
+	const DECK = document.getElementsByClassName("deck");
+	const DECK_ID = document.getElementById("display");
+	const HTML_TEMP = (DECK_ID).innerHTML;
+	const CLASS_ARRAY = document.querySelectorAll(".deck li");
+	const ID_ARRAY = [];
+
+	let starScore = document.querySelectorAll(".fa-star");
+	let html = " ";
+	let cardId, timer;
+	let openCardList = [];
+	let matchedCardList = [];
+	let moves = 0, hour = 0,minute = 0,second = 0, score = 3;
+	let hr = document.querySelector(".hr");
+	let min = document.querySelector(".min");
 	let sec = document.querySelector(".sec");
 	
 	
-	for(let i=0;i<classArray.length;i++){	/*Store the ids of all the cards in the deck in idArray */
-		idArray[i]=classArray[i].getAttribute("id"); 
+	for(let i = 0; i < (CLASS_ARRAY).length; i++){	/*Store the ids of all the cards in the deck in idArray */
+		(ID_ARRAY)[i] = (CLASS_ARRAY)[i].getAttribute("id"); 
 	}	
 
 	refreshDeck(); /*Start with a shuffled deck and fresh Score Panel*/
@@ -29,24 +30,30 @@ $(document).ready(function(){
 
 /*..................Function definitions..............................*/
 
-	/*Refresh deck, Score Panel and all the variables*/
-	function refreshDeck(){
-		deckId.innerHTML=htmlTemp;
-		deckId.classList.remove("final");
-		shuffledDeck(idArray);
+	/**
+	* @description Refreshes the desk, score-panel andall teh variables
+	*/
+	function refreshDeck() {
+		(DECK_ID).innerHTML = (HTML_TEMP);
+		(DECK_ID).classList.remove("final");
+		shuffledDeck(ID_ARRAY);
 		cardClick();
-		moves=0;
-		hour=0;
-		second=0;
-		minute=0;
-		matchedCardList=[];
+		moves = 0;
+		hour = 0;
+		second = 0;
+		minute = 0;
+		matchedCardList = [];
 		html = " ";
 		updateMoves();
 		resetScore();
-		myVar = setInterval(myTimer,1000);/*Start the timer*/
+		timer = setInterval(myTimer,1000);/*Start the timer*/
 	}
 
-	/*Shuffle function from http://stackoverflow.com/a/2450976*/
+	/**
+	* @description Shuffle function from http://stackoverflow.com/a/2450976
+	* @param {1} array 
+	* @returns shuffled array
+	*/
 	function shuffle(array) {
 	    let currentIndex = array.length, temporaryValue, randomIndex;
 	    while (currentIndex !== 0) {
@@ -59,66 +66,80 @@ $(document).ready(function(){
 	    return array;
 	}
 
-	/*Shuffle the cards in the deck*/
-	function shuffledDeck(cards){
-		let shuffledList= shuffle(cards);
-		for(let shuffledCard of shuffledList){
+	/**
+	* @description Update the deck with shuffled cards
+	* @param {1} array of card Ids
+	*/
+	function shuffledDeck(cards) {
+		let shuffledList = shuffle(cards);
+		for(let shuffledCard of shuffledList) {
 			html += `<li class="card" id="${shuffledCard}">${document.getElementById(shuffledCard).innerHTML}</li>`;
 		}
-		$(deck).empty(); /*Clear the deck*/
-		$(deck).append(html);/*Load shuffled cards*/
-		clearInterval(myVar);/*Clear the previous timer*/
+		$(DECK).empty(); /*Clear the deck*/
+		$(DECK).append(html);/*Load shuffled cards*/
+		clearInterval(timer);/*Clear the previous timer*/
 	}
 
-	/*Handle the  card click*/
-	function cardClick(){
-		$('.card').click(function(event){
+	/**
+	* @description Handle the  card click
+	*/
+	function cardClick() {
+		$('.card').click(function(event) {
 			cardId = String(event.target.id);/*Store the id of the card clicked in cardId*/
-			openCard();
-			checkForMatch();
+			openCard(cardId);
+			checkForMatch(cardId);
 		});
 	}
 
-	/*Open the card clicked*/
-	function openCard(){
-		document.getElementById(cardId).classList.add("show", "open");
+	/**
+	* @description Open the card clicked
+	* @param {1} card 
+	*/
+	function openCard(card) {
+		document.getElementById(card).classList.add("show", "open");
 	}
 
-	/*Close the unmatched card*/
-	function closeCard(element){
-		setTimeout(function(){
-			document.getElementById(element).classList.remove("show", "open");}, 500);
+	/**
+	* @description Close the unmatched cards
+	* @param {1} card 
+	*/
+	function closeCard(card) {
+		setTimeout(function() {
+			document.getElementById(card).classList.remove("show", "open");}, 500);
 	}
 
-	/*Check if the cards match*/
-	function checkForMatch(){
+	/**
+	* @description Check if the cards match
+	* @param {1} card 
+	*/
+	function checkForMatch(card) {
 		
-		if(openCardList.indexOf(cardId)==-1){ /*Proceed only if two different cards are clicked*/
-			openCardList.push(cardId); /*Add cards to the openCardist*/
+		if(openCardList.indexOf(card) == -1) { /*Proceed only if two different cards are clicked*/
+			openCardList.push(card); /*Add cards to the openCardist*/
 		
-			if(openCardList.length>=2){ /*Proceed only if there are atleast 2 cards to check for match*/
+			if(openCardList.length >= 2) { /*Proceed only if there are atleast 2 cards to check for match*/
 				let card1 = String(openCardList[0]).slice(0,String(openCardList[0]).search("-")); /*Store details of first card in card1*/
 				let card2 = String(openCardList[1]).slice(0,String(openCardList[1]).search("-")); /*Store details of second card in card2*/
 				moves++; /*Increment the moves*/
-				updateMoves();
-				updateScore();
+				updateMoves(moves);
+				updateScore(moves);
 		
-				if(card1==card2){ /*Check if the cards match and if they match, add them to a another list*/
-					for(let openCard of openCardList){
+				if(card1 == card2) { /*Check if the cards match and if they match, add them to a another list*/
+					for(let openCard of openCardList) {
 						matchedCardList.push(openCard);
 					}
-					for(let matchedCard of matchedCardList){
+					for(let matchedCard of matchedCardList) {
 						document.getElementById(matchedCard).classList.add("match");/*Change the background color of matched cards*/
-					}				
+					}				 
 		
-					if(matchedCardList.length==16){ /*Check if all cards are matched*/
+					if(matchedCardList.length == 16){ /*Check if all cards are matched*/
 						updateScore();
 						displayMsg(); 
-						clearInterval(myVar);/*Stop the timer when all cards are matched*/
+						clearInterval(timer);/*Stop the timer when all cards are matched*/
 					}
 				}
-				else{ /*Close cards if they dont match*/
-					for (let openCard of openCardList){
+				else { /*Close cards if they dont match*/
+					for (let openCard of openCardList) {
 						closeCard(String(openCard));
 					}
 				}
@@ -127,42 +148,50 @@ $(document).ready(function(){
 		}
 	}
 
-	/*Update the no of Moves on the Score panel*/
-	function updateMoves(){
+	/**
+	* @description Update the no of Moves on the Score panel
+	*/
+	function updateMoves() {
 		document.querySelector("span.moves").textContent = String(moves);
 	}
 
-	/*Highlight the stars based on Score*/
-	function updateScore(){
-		if (moves<=15){
+	/**
+	* @description Highlight the stars based on Score
+	*/
+	function updateScore() {
+		if (moves <= 15) {
 			score = 3;
 		}
-		else if (moves<=20){
+		else if (moves <= 20) {
 			score = 2;
 		}
-		else{
+		else {
 			score = 1;
 		}
-		for(let i=score;i<3;i++){
+		for(let i = score; i < 3; i++) {
 			document.getElementById(starScore[2-i].getAttribute("id")).classList.remove("highlight");
 		}
 	}
 
-	/*Reset the score*/
-	function resetScore(){
-		for(let i=0;i<starScore.length;i++){
+	/**
+	* @description Reset the score
+	*/
+	function resetScore() {
+		for(let i = 0; i < starScore.length; i++) {
 			document.getElementById(starScore[i].getAttribute("id")).classList.add("highlight");
 		}
 	}
 
-	/*Compute and Display the time elapsed*/
-	function myTimer(){
-		if(second<59){
+	/**
+	* @description Compute and Display the time elapsed
+	*/
+	function myTimer() {
+		if(second<59) {
 			second++;
 		}
 		else{
 			second = 0;
-			if(minute<59){
+			if(minute<59) {
 				minute++;
 			}
 			else{
@@ -170,17 +199,19 @@ $(document).ready(function(){
 				hour++;
 			}
 		}
-		sec.textContent = ((second<10)?"0"+second:second);
-		min.textContent = ((minute<10)?"0"+minute:minute);
-		hr.textContent = ((hour<10)?"0"+hour:hour);
+		sec.textContent = ((second<10) ? "0"+second : second);
+		min.textContent = ((minute<10) ?  "0"+minute : minute);
+		hr.textContent = ((hour<10) ? "0"+hour : hour);
 	}
 
-	/*Display Message on Completion*/
-	function displayMsg(){
-		deckId.classList.add("final");
-		$(deck).empty();
+	/**
+	* @description Display Message on Completion
+	*/
+	function displayMsg() {
+		(DECK_ID).classList.add("final");
+		$(DECK).empty();
 			
-		deckId.innerHTML = /*Update the deck to show the Congratulatory message upon matching all the cards*/
+		(DECK_ID).innerHTML = /*Update the deck to show the Congratulatory message upon matching all the cards*/
 		`<div class="win">
 			<p class="msg">Congratulations! You Won!</p>
 			<p>With ${moves} moves and ${score} stars<p>
@@ -188,7 +219,7 @@ $(document).ready(function(){
 			<button class="playAgain" type="button" class="btn btn-primary">Play again</button>
 		</div>`;
 
-		$('.playAgain').click(function(){	/*Reshuffle the deck when the player wants to play again*/
+		$('.playAgain').click(function() {	/*Reshuffle the deck when the player wants to play again*/
 			refreshDeck();
 		});
 	}
