@@ -1,10 +1,10 @@
 $(document).ready(function(){
 
-	const DECK = document.getElementsByClassName("deck");
-	const DECK_ID = document.getElementById("display");
-	const HTML_TEMP = (DECK_ID).innerHTML;
-	const CLASS_ARRAY = document.querySelectorAll(".deck li");
-	const ID_ARRAY = [];
+	const deck = document.getElementsByClassName("deck");
+	const deckId = document.getElementById("display");
+	const htmlTemp = deckId.innerHTML;
+	const classArray = document.querySelectorAll(".deck li");
+	const idArray = [];
 
 	let starScore = document.querySelectorAll(".fa-star");
 	let html = " ";
@@ -17,8 +17,8 @@ $(document).ready(function(){
 	let sec = document.querySelector(".sec");
 	
 	
-	for(let i = 0; i < (CLASS_ARRAY).length; i++){	/*Store the ids of all the cards in the deck in idArray */
-		(ID_ARRAY)[i] = (CLASS_ARRAY)[i].getAttribute("id"); 
+	for(let i = 0; i < classArray.length; i++){	/*Store the ids of all the cards in the deck in idArray */
+		idArray[i] = classArray[i].getAttribute("id"); 
 	}	
 
 	refreshDeck(); /*Start with a shuffled deck and fresh Score Panel*/
@@ -34,9 +34,9 @@ $(document).ready(function(){
 	* @description Refreshes the desk, score-panel andall teh variables
 	*/
 	function refreshDeck() {
-		(DECK_ID).innerHTML = (HTML_TEMP);
-		(DECK_ID).classList.remove("final");
-		shuffledDeck(ID_ARRAY);
+		deckId.innerHTML = htmlTemp;
+		deckId.classList.remove("final");
+		shuffledDeck(idArray);
 		cardClick();
 		moves = 0;
 		hour = 0;
@@ -44,6 +44,7 @@ $(document).ready(function(){
 		minute = 0;
 		matchedCardList = [];
 		html = " ";
+		openCardList = [];
 		updateMoves();
 		resetScore();
 		timer = setInterval(myTimer,1000);/*Start the timer*/
@@ -75,8 +76,8 @@ $(document).ready(function(){
 		for(let shuffledCard of shuffledList) {
 			html += `<li class="card" id="${shuffledCard}">${document.getElementById(shuffledCard).innerHTML}</li>`;
 		}
-		$(DECK).empty(); /*Clear the deck*/
-		$(DECK).append(html);/*Load shuffled cards*/
+		$(deck).empty(); /*Clear the deck*/
+		$(deck).append(html);/*Load shuffled cards*/
 		clearInterval(timer);/*Clear the previous timer*/
 	}
 
@@ -169,7 +170,7 @@ $(document).ready(function(){
 			score = 1;
 		}
 		for(let i = score; i < 3; i++) {
-			document.getElementById(starScore[2-i].getAttribute("id")).classList.remove("highlight");
+			document.getElementById(starScore[i].getAttribute("id")).classList.remove("highlight");
 		}
 	}
 
@@ -208,10 +209,10 @@ $(document).ready(function(){
 	* @description Display Message on Completion
 	*/
 	function displayMsg() {
-		(DECK_ID).classList.add("final");
-		$(DECK).empty();
+		deckId.classList.add("final");
+		$(deck).empty();
 			
-		(DECK_ID).innerHTML = /*Update the deck to show the Congratulatory message upon matching all the cards*/
+		deckId.innerHTML = /*Update the deck to show the Congratulatory message upon matching all the cards*/
 		`<div class="win">
 			<p class="msg">Congratulations! You Won!</p>
 			<p>With ${moves} moves and ${score} stars<p>
@@ -227,16 +228,3 @@ $(document).ready(function(){
 });
 
 
-
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
